@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="We propose the respondent coverage gap (RCG), which represents each respondent as a point defined by their complete answer profile and measures how far each human respondent is from the nearest generated one, relative to the distance between human samples.">
+  <meta name="keywords" content="silicon sampling, llm">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Silicon Samples Match the Answers but Not the Respondents</title>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Silicon Samples Match the Answers but Not the Respondents</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Yusuke Kumagae<sup>1</sup>,</span>
+            <span class="author-block">Masahiro Kaneko<sup>2</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Hakuhodo DY Holdings Inc.,</span>
+            <span class="author-block"><sup>2</sup>MBZUAI</span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">
+              yusuke.kumagae[at]hakuhodo.co.jp
+            </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2610.30900"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="./static/code/rcg_code.zip"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-archive"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div class="content">
+        <figure>
+          <div class="columns is-centered">
+            <div class="column is-half">
+              <img src="./static/images/fig1_teaser.png"
+                  alt="Top: answer profiles of human respondents with Marginals (left) and with Copula (right). Bottom left: answers of Human, Marginals, and Copula to the question on the importance of politics. Bottom right: distributions of the nearest-neighbor distance for Human, Marginals, and Copula.">
+            </div>
+          </div>
+          <figcaption>
+            Figure 1: Marginals reproduces each question's answer distribution, and Copula additionally
+            models pairwise dependence between questions. Top: answer profiles of human and generated
+            respondents. Bottom: existing evaluation compares answers per question, where the three
+            groups are identical (left); ours compares respondents, where humans are farther from the
+            nearest generated respondent than from the nearest other human (right).
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Silicon sampling generates survey respondents by having a large language model (LLM)
+            answer a survey as a person with given demographic attributes, and the resulting synthetic
+            populations are increasingly used in place of human ones.
+            Existing evaluations focus on individual-answer accuracy, per-question answer
+            distributions, and correlations across questions.
+            None of these compares the respondents themselves, so a generator whose respondents have
+            combinations of answers found in no human respondent can still score well if it
+            reproduces every answer distribution.
+            We propose the respondent coverage gap (RCG), which represents each respondent as a point
+            defined by their complete answer profile and measures how far each human respondent is
+            from the nearest generated one, relative to the distance between human samples.
+            On two US social surveys, all six LLMs we evaluate leave human respondents uncovered, and
+            under our main settings, they fall behind a baseline that samples each answer
+            independently from the human marginals.
+            Across the prompting and inference settings we test, every LLM has a higher RCG than a
+            Gaussian copula fitted to the human data.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Respondent coverage gap. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Respondent Coverage Gap</h2>
+        <div class="content has-text-justified">
+          <p>
+            We propose the <i>respondent coverage gap</i> (RCG), a metric of how well a synthetic
+            population covers the respondent distribution of a human population.
+            We treat each answer profile as a point and measure, from each human point, the distance
+            to the nearest generated point; this directly quantifies how close each human respondent
+            is to a generated respondent.
+            Because this distance depends on the number of questions and the size of the populations,
+            we normalize it by the same distance measured among the human points themselves.
+            The reference is another human sample rather than the human respondents themselves: a
+            synthetic population should not copy the human respondents but resemble them as a
+            population.
+            A ratio of one means the synthetic population is as close to the human respondents as
+            another human sample would be; the more it exceeds one, the farther the least covered
+            human respondents are from any generated respondent.
+          </p>
+          <p>
+            A respondent is represented as an answer vector
+            \(\boldsymbol{u} = (u_1, \ldots, u_M)\), where \(u_m\) is the answer chosen for question
+            \(q_m\).
+            We write \(\mathcal{H}\) for a set of human answer vectors and \(\mathcal{G}\) for a set
+            of generated answer vectors.
+            Given a distance \(d(\boldsymbol{u}, \boldsymbol{v})\) between answer vectors, let
+            \(\delta(\boldsymbol{u}; \mathcal{S})\) be the distance from an answer vector
+            \(\boldsymbol{u}\) to its nearest neighbor in a set \(\mathcal{S}\).
+            We define RCG and its reverse-direction companion, the <i>off-support ratio</i> (OSR):
+          </p>
+          <p>
+            \[
+            \begin{aligned}
+            \mathrm{RCG}(\mathcal{H}, \mathcal{G}) &amp;= \frac{d^{95}_{\mathcal{H} \to \mathcal{G}}}{d^{95}_{\mathcal{H} \to \mathcal{H}}}, \\
+            \mathrm{OSR}(\mathcal{H}, \mathcal{G}) &amp;= \frac{d^{95}_{\mathcal{G} \to \mathcal{H}}}{d^{95}_{\mathcal{H} \to \mathcal{H}}},
+            \end{aligned}
+            \]
+          </p>
+          <p>
+            where \(d^{95}_{\mathcal{H} \to \mathcal{G}}\) is the 95th percentile of
+            \(\delta(\boldsymbol{u}; \mathcal{G})\) over the human respondents
+            \(\boldsymbol{u} \in \mathcal{H}\) (cf. directed Hausdorff distance),
+            \(d^{95}_{\mathcal{G} \to \mathcal{H}}\) is the 95th percentile of
+            \(\delta(\boldsymbol{v}; \mathcal{H})\) over the generated respondents
+            \(\boldsymbol{v} \in \mathcal{G}\), and \(d^{95}_{\mathcal{H} \to \mathcal{H}}\) is the
+            95th percentile of the distances from each human respondent to their nearest other human
+            respondent.
+            RCG measures the extent to which human respondents are left uncovered by the generated
+            ones; OSR reverses the direction of the numerator while keeping the same denominator, and
+            thus measures the extent to which generated respondents lie outside the support of the
+            human respondents.
+            Since \(\delta(\boldsymbol{u}; \mathcal{S})\) shrinks as \(\mathcal{S}\) grows, we use
+            equally sized \(\mathcal{H}\) and \(\mathcal{G}\) in our main evaluation.
+          </p>
+          <p>
+            Both ratios are expected to be near one when \(\mathcal{G}\) is an independent sample of
+            human respondents.
+            \(\mathrm{RCG} &gt; 1\) indicates undercoverage of human respondents, whereas
+            \(\mathrm{OSR} &gt; 1\) indicates generated respondents unusually far from the human
+            sample (<i>off-support</i>).
+            A low OSR is not necessarily better: when \(\mathrm{RCG} &gt; 1\) but
+            \(\mathrm{OSR} &lt; 1\), generated respondents stay close to some human respondents while
+            leaving others poorly covered (<i>contraction</i>).
+            Figure 2 illustrates these patterns: the off-support and contraction examples have similar
+            RCG values (2.17 and 2.06), but their OSR values lie on opposite sides of one (2.24 and
+            0.55).
+          </p>
+          <figure>
+            <div class="columns is-centered">
+              <div class="column is-three-quarters">
+                <img src="./static/images/fig2_toy_patterns.png"
+                     alt="Three scatter plots of human and generated respondents: (a) human-like with RCG = 0.97 and OSR = 1.03, (b) off-support with RCG = 2.17 and OSR = 2.24, and (c) contraction with RCG = 2.06 and OSR = 0.55.">
+              </div>
+            </div>
+            <figcaption>
+              Figure 2: Toy examples of the human-like, off-support, and contraction patterns on
+              two-dimensional synthetic data (50 human and 50 generated respondents, Euclidean
+              distance). The panels illustrate representative configurations, not an exhaustive
+              classification of RCG and OSR values.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <!--/ Respondent coverage gap. -->
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{kumagae2026silicon,
+  title         = {Silicon Samples Match the Answers but Not the Respondents},
+  author        = {Kumagae, Yusuke and Kaneko, Masahiro},
+  journal       = {arXiv preprint arXiv:2610.30900},
+  year          = {2026},
+  eprint        = {2610.30900},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This website is built on the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of the
+            <a href="https://nerfies.github.io">Nerfies</a> website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
